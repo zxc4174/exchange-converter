@@ -1,0 +1,30 @@
+body {
+    padding: 2rem;
+}
+
+.text-gray90 {
+    color: #e5e5e5;
+    opacity: 0.8;
+}
+
+input {
+    border: 1px solid silver;
+    height: 2.5rem !important;
+}
+
+.card {
+    margin: 0 auto;
+    margin-top: 5rem;
+    padding: 1rem;
+    float: none;
+    width: 30rem;
+}
+
+.card-title {
+    margin: 1rem;
+}
+
+#exchangeConverterPanel {
+    margin-top: 3rem !important;
+    margin-bottom: 3rem !important;
+}
