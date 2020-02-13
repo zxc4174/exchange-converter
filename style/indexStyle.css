@@ -7,9 +7,19 @@ body {
     opacity: 0.8;
 }
 
+.font-small {
+    font-size: 10px;
+}
+
 input {
     border: 1px solid silver;
-    height: 2.5rem !important;
+    height: 2.5rem;
+}
+
+#exchangeConverterPanel img:hover,
+#nationOption img:hover {
+    opacity: 0.6;
+    cursor: pointer;
 }
 
 .card {

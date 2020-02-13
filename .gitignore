@@ -5,6 +5,7 @@
 /webalizer
 /dashboard
 /img
+/.vscode
 
 applications.html
 bitnami.css
