@@ -1,6 +1,6 @@
 # Exchange Converter
 
-Used XAMPP, PHP
+version : Pre-alpha
 
 ![Schematic view](/img/example_image.png)
 
