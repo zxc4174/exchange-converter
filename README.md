@@ -2,6 +2,8 @@
 
 Used XAMPP, PHP
 
+![Schematic view](https://github.com/zxc4174/exechange-converter/master/img/example_image.png)
+
 ## Installation
 
 ```bash
