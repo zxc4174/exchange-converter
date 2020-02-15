@@ -124,6 +124,12 @@
         </div>
     </div>
 
+    <!-- Copyright -->
+    <div class="text-center text-light mt-3">
+        <p>Copyright &copy; 2020 BY YUHSIANG LO</p>
+    </div>
+    <!-- Copyright -->
+
     <script>
     let exrate_A = '<?php echo $currency->USDTWD->Exrate; ?>';
     let exrate_B = '<?php echo $currency->USDUSD->Exrate; ?>';
