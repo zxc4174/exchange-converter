@@ -6,34 +6,24 @@
     * { "USDTWD": {"Exrate": 32.403, "Date": "2015-10-28 15:37:00"} }
     * { "美金兌台幣": [現價, UTC date] }
     */
-    $nation_A='taiwan';
-    $nation_B='united-states';
-    $USD_A='USDTWD';
-    $USD_B='USDUSD';
-    $UTC_A=$currency->$USD_A->UTC;
-    $UTC_B=$currency->$USD_B->UTC;
-    $amount=1;
-    $targetAmount=floor(1/$currency->$USD_A->Exrate*$currency->$USD_B->Exrate*10000)/10000;
-    $img_A='./img/'.$nation_A.'.png';
-    $img_B='./img/'.$nation_B.'.png';
+    $targetAmount=floor(1/$currency->USDTWD->Exrate*$currency->USDUSD->Exrate*10000)/10000;
     
     if(isset($_POST['currentNation']) && isset($_POST['nextNation'])){
-        $nation_A=$_POST['nextNation'];
         switch ($_POST['nextNation']){
             case 'taiwan':
-                $arr = array ('img'=>'./img/taiwan.png','USD_TO'=>$currency->USDTWD->Exrate,'UTC'=>$currency->USDTWD->UTC);
+                $arr = array ('img'=>'./img/taiwan.png','exrate'=>$currency->USDTWD->Exrate,'utc'=>$currency->USDTWD->UTC);
                 echo json_encode($arr);
                 break;
             case 'united-states':
-                $arr = array ('img'=>'./img/united-states.png','USD_TO'=>$currency->USDTWD->Exrate,'UTC'=>$currency->USDTWD->UTC);
+                $arr = array ('img'=>'./img/united-states.png','exrate'=>$currency->USDUSD->Exrate,'utc'=>$currency->USDUSD->UTC);
                 echo json_encode($arr);
                 break;
             case 'japan':
-                $arr = array ('img'=>'./img/japan.png','USD_TO'=>$currency->USDTWD->Exrate,'UTC'=>$currency->USDTWD->UTC);
+                $arr = array ('img'=>'./img/japan.png','exrate'=>$currency->USDJPY->Exrate,'utc'=>$currency->USDJPY->UTC);
                 echo json_encode($arr);
                 break;
             case 'china':
-                $arr = array ('img'=>'./img/china.png','USD_TO'=>$currency->USDTWD->Exrate,'UTC'=>$currency->USDTWD->UTC);
+                $arr = array ('img'=>'./img/china.png','exrate'=>$currency->USDCNH->Exrate,'utc'=>$currency->USDCNH->UTC);
                 echo json_encode($arr);
                 break;
             default:
@@ -108,12 +98,12 @@
                 <!-- Exchange Converter -->
                 <div id="exchangeConverterPanel" class="row container m-0 justify-content-center">
                     <div class="text-center">
-                        <img id="nation_A" class="rounded-circle mb-3 shadow img-fluid" src="<?php echo $img_A;?>"
+                        <img id="nation_A" class="rounded-circle mb-3 shadow img-fluid" src="./img/taiwan.png"
                             alt="nation_A" height="60" width="60" data-toggle="modal" data-target="#nationSelectModal">
-                        <p class="font-small text-gray"><?php echo $UTC_A?></p>
+                        <p id="utc_A" class="font-small text-gray"><?php echo $currency->USDTWD->UTC;?></p>
                         <div>
                             <input id="amount" class="text-center text-dark font-weight-bolder" type="text" size="10"
-                                value="<?php echo $amount;?>" />
+                                value=1 />
                         </div>
                     </div>
                     <div class="col-4 text-center text-gray90">
@@ -122,7 +112,7 @@
                     <div class="text-center">
                         <img id="nation_B" class="rounded-circle mb-3 shadow img-fluid" src="./img/united-states.png"
                             alt="nation_B" height="60" width="60" data-toggle="modal" data-target="#nationSelectModal">
-                        <p class="font-small text-gray"><?php echo $UTC_B?></p>
+                        <p id="utc_B" class="font-small text-gray"><?php echo $currency->USDTWD->UTC;?></p>
                         <div>
                             <input id="targetAmount" class="text-center text-primary font-weight-bolder" type="text"
                                 size="10" value="<?php echo $targetAmount;?>" />
@@ -135,13 +125,16 @@
     </div>
 
     <script>
+    let exrate_A = '<?php echo $currency->USDTWD->Exrate; ?>';
+    let exrate_B = '<?php echo $currency->USDUSD->Exrate; ?>';
     $('input').on('input', (elm) => {
         if (elm.target.id == 'amount') {
-            const targetAmount = '<?php echo $targetAmount; ?>';
-            $('#targetAmount').val(Math.floor(targetAmount * elm.target.value * 10000) / 10000);
+            $('#targetAmount').val(Math.floor(1 / exrate_A * exrate_B * elm.target.value * 10000) / 10000);
+        } else if (exrate_A == exrate_B) {
+            $('#amount').val(elm.target.value);
+            $('#targetAmount').val(elm.target.value);
         } else {
-            const exrate_A = '<?php echo $currency->$USD_A->Exrate; ?>';
-            $('#amount').val(Math.floor(exrate_A * elm.target.value * 10000) / 10000);
+            $('#amount').val(Math.floor(1 / exrate_B * exrate_A * elm.target.value * 10000) / 10000);
         }
     });
 
@@ -161,6 +154,21 @@
                     console.log("ajax post success");
                     let jsonData = JSON.parse(response);
                     $('#' + currentNation).attr('src', jsonData.img);
+                    if (currentNation === 'nation_A') {
+                        $('#utc_A').text(jsonData.utc);
+                        exrate_A = jsonData.exrate;
+                    } else {
+                        $('#utc_B').text(jsonData.utc);
+                        exrate_B = jsonData.exrate;
+                        console.log(exrate_A);
+                        console.log(exrate_B);
+                    }
+                    if (exrate_A == exrate_B) {
+                        $('#targetAmount').val(1);
+                    } else {
+                        $('#targetAmount').val(Math.floor(1 / exrate_A * exrate_B * 10000) /
+                            10000);
+                    }
                     $('#amount').val(1);
                 }
             });
