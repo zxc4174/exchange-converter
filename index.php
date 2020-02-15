@@ -6,12 +6,41 @@
     * { "USDTWD": {"Exrate": 32.403, "Date": "2015-10-28 15:37:00"} }
     * { "美金兌台幣": [現價, UTC date] }
     */
+    $nation_A='taiwan';
+    $nation_B='united-states';
     $USD_A='USDTWD';
     $USD_B='USDUSD';
     $UTC_A=$currency->$USD_A->UTC;
     $UTC_B=$currency->$USD_B->UTC;
     $amount=1;
-    $targetAmount=floor(1/$currency->$USD_A->Exrate*$currency->$USD_B->Exrate*10000)/10000;    
+    $targetAmount=floor(1/$currency->$USD_A->Exrate*$currency->$USD_B->Exrate*10000)/10000;
+    $img_A='./img/'.$nation_A.'.png';
+    $img_B='./img/'.$nation_B.'.png';
+    
+    if(isset($_POST['currentNation']) && isset($_POST['nextNation'])){
+        $nation_A=$_POST['nextNation'];
+        switch ($_POST['nextNation']){
+            case 'taiwan':
+                $arr = array ('img'=>'./img/taiwan.png','USD_TO'=>$currency->USDTWD->Exrate,'UTC'=>$currency->USDTWD->UTC);
+                echo json_encode($arr);
+                break;
+            case 'united-states':
+                $arr = array ('img'=>'./img/united-states.png','USD_TO'=>$currency->USDTWD->Exrate,'UTC'=>$currency->USDTWD->UTC);
+                echo json_encode($arr);
+                break;
+            case 'japan':
+                $arr = array ('img'=>'./img/japan.png','USD_TO'=>$currency->USDTWD->Exrate,'UTC'=>$currency->USDTWD->UTC);
+                echo json_encode($arr);
+                break;
+            case 'china':
+                $arr = array ('img'=>'./img/china.png','USD_TO'=>$currency->USDTWD->Exrate,'UTC'=>$currency->USDTWD->UTC);
+                echo json_encode($arr);
+                break;
+            default:
+                break;
+        }
+        exit;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -44,29 +73,25 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body bg-light">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <br />
-                    <div id="nationOption" class="text-center row">
+                    <div id="nationOption" class="text-center row mt-3">
                         <span class="col-3">
-                            <img class="rounded-circle mb-3 shadow" src="./img/taiwan.png" alt="flag_tw" height="60"
-                                width="60">
+                            <img id="taiwan" class="rounded-circle mb-3 shadow" src="./img/taiwan.png" alt="flag_tw"
+                                height="60" width="60">
                             <p class="font-small text-gray">Taiwan</p>
                         </span>
                         <span class="col-3">
-                            <img class="rounded-circle mb-3 shadow" src="./img/united-states.png" alt="flag_us"
-                                height="60" width="60">
+                            <img id="united-states" class="rounded-circle mb-3 shadow" src="./img/united-states.png"
+                                alt="flag_us" height="60" width="60">
                             <p class="font-small text-gray">United States</p>
                         </span>
                         <span class="col-3">
-                            <img class="rounded-circle mb-3 shadow" src="./img/japan.png" alt="flag_jp" height="60"
-                                width="60">
+                            <img id="japan" class="rounded-circle mb-3 shadow" src="./img/japan.png" alt="flag_jp"
+                                height="60" width="60">
                             <p class="font-small text-gray">Japan</p>
                         </span>
                         <span class="col-3">
-                            <img class="rounded-circle mb-3 shadow" src="./img/china.png" alt="flag_cn" height="60"
-                                width="60">
+                            <img id="china" class="rounded-circle mb-3 shadow" src="./img/china.png" alt="flag_cn"
+                                height="60" width="60">
                             <p class="font-small text-gray">China</p>
                         </span>
                     </div>
@@ -83,8 +108,8 @@
                 <!-- Exchange Converter -->
                 <div id="exchangeConverterPanel" class="row container m-0 justify-content-center">
                     <div class="text-center">
-                        <img class="rounded-circle mb-3 shadow img-fluid" src="./img/taiwan.png" alt="flag_A"
-                            height="60" width="60" data-toggle="modal" data-target="#nationSelectModal">
+                        <img id="nation_A" class="rounded-circle mb-3 shadow img-fluid" src="<?php echo $img_A;?>"
+                            alt="nation_A" height="60" width="60" data-toggle="modal" data-target="#nationSelectModal">
                         <p class="font-small text-gray"><?php echo $UTC_A?></p>
                         <div>
                             <input id="amount" class="text-center text-dark font-weight-bolder" type="text" size="10"
@@ -95,8 +120,8 @@
                         <i class="fas fa-exchange-alt fa-4x"></i>
                     </div>
                     <div class="text-center">
-                        <img class="rounded-circle mb-3 shadow img-fluid" src="./img/united-states.png" alt="flag_B"
-                            height="60" width="60" data-toggle="modal" data-target="#nationSelectModal">
+                        <img id="nation_B" class="rounded-circle mb-3 shadow img-fluid" src="./img/united-states.png"
+                            alt="nation_B" height="60" width="60" data-toggle="modal" data-target="#nationSelectModal">
                         <p class="font-small text-gray"><?php echo $UTC_B?></p>
                         <div>
                             <input id="targetAmount" class="text-center text-primary font-weight-bolder" type="text"
@@ -110,14 +135,36 @@
     </div>
 
     <script>
-    $('#amount').on('input', () => {
-        const targetAmount = '<?php echo $targetAmount; ?>';
-        $('#targetAmount').val(Math.floor(targetAmount * $('#amount').val() * 10000) / 10000);
+    $('input').on('input', (elm) => {
+        if (elm.target.id == 'amount') {
+            const targetAmount = '<?php echo $targetAmount; ?>';
+            $('#targetAmount').val(Math.floor(targetAmount * elm.target.value * 10000) / 10000);
+        } else {
+            const exrate_A = '<?php echo $currency->$USD_A->Exrate; ?>';
+            $('#amount').val(Math.floor(exrate_A * elm.target.value * 10000) / 10000);
+        }
     });
 
-    $('#targetAmount').on('input', () => {
-        const exrate_A = '<?php echo $currency->$USD_A->Exrate; ?>';
-        $('#amount').val(Math.floor(exrate_A * $('#targetAmount').val() * 10000) / 10000);
+    let currentNation = "";
+    let nextNation = "";
+    $('#exchangeConverterPanel img').on('click', (elm) => {
+        currentNation = elm.target.id;
+        $('#nationSelectModal img').on('click', (flag) => {
+            nextNation = flag.target.id;
+            $.ajax({
+                type: 'post',
+                data: {
+                    currentNation: elm.target.id,
+                    nextNation: flag.target.id
+                },
+                success: (response) => {
+                    console.log("ajax post success");
+                    let jsonData = JSON.parse(response);
+                    $('#' + currentNation).attr('src', jsonData.img);
+                    $('#amount').val(1);
+                }
+            });
+        });
     });
     </script>
 </body>
