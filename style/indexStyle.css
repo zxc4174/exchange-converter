@@ -38,3 +38,16 @@ input {
     margin-top: 3rem !important;
     margin-bottom: 3rem !important;
 }
+
+@media(max-width:700px) {
+    #exchangeConverterPanel {
+        margin: 1rem auto !important;
+        max-width: 150px !important;
+    }
+
+    #change_icon {
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+        transform: rotate(-90deg);
+    }
+}

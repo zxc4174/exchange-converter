@@ -1,6 +1,6 @@
 # Exchange Converter
 
-version : Pre-alpha
+version : Alpha
 
 ![Schematic view](/img/example_image.png)
 

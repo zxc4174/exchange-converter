@@ -94,7 +94,7 @@
     <div class="d-flex">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title text-center">EXCHANGE CONVERTER</h5>
+                <h5 class="card-title text-center mb-4">EXCHANGE CONVERTER</h5>
                 <!-- Exchange Converter -->
                 <div id="exchangeConverterPanel" class="row container m-0 justify-content-center">
                     <div class="text-center">
@@ -106,7 +106,7 @@
                                 value=1 />
                         </div>
                     </div>
-                    <div class="col-4 text-center text-gray90">
+                    <div id="change_icon" class="text-center text-gray90">
                         <i class="fas fa-exchange-alt fa-4x"></i>
                     </div>
                     <div class="text-center">
@@ -151,7 +151,7 @@
                     nextNation: flag.target.id
                 },
                 success: (response) => {
-                    console.log("ajax post success");
+                    // console.log("ajax post success");
                     let jsonData = JSON.parse(response);
                     $('#' + currentNation).attr('src', jsonData.img);
                     if (currentNation === 'nation_A') {
@@ -160,8 +160,6 @@
                     } else {
                         $('#utc_B').text(jsonData.utc);
                         exrate_B = jsonData.exrate;
-                        console.log(exrate_A);
-                        console.log(exrate_B);
                     }
                     if (exrate_A == exrate_B) {
                         $('#targetAmount').val(1);
