@@ -12,5 +12,5 @@ git pull
 
 ## License
 
-[unlicense](https://choosealicense.com/licenses/unlicense/) \
+[MIT](https://choosealicense.com/licenses/mit/) \
 Icons made by [Freepik](https://www.flaticon.com/authors/freepik/)
