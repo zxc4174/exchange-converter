@@ -1,6 +1,5 @@
 # Exchange Converter
 
-version : Alpha
 
 ![Schematic view](/img/example_image.png)
 
